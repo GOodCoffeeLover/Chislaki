@@ -3,7 +3,6 @@ A = [-4, -6, -10;
     -6, -11,  4;
     -10, 4, -3];
 
-[L,V] = yakobi(A, 6)
  function [k, m] = maxij(A)
     k = 1;
     m = 2;
@@ -12,10 +11,10 @@ A = [-4, -6, -10;
             if (abs(A(k, m)) < abs(A(i,j)))
                 k = i;
                 m = j;
-            end
-        end
-    end
-  end
+            endif
+        endfor
+    endfor
+  endfunction
    
   function [A, V] = yakobi(A, n)
     V = eye(size(A));
@@ -28,5 +27,7 @@ A = [-4, -6, -10;
         h
         V = V*h;
         A= inv(h)*A*h
-    end
- end
+    endfor
+ endfunction
+ 
+ [L,V] = yakobi(A, 6)
