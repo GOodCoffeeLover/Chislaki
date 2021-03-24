@@ -2,8 +2,8 @@ format compact
 A = [-4, -6, -10; 
     -6, -11,  4;
     -10, 4, -3];
-
- function [k, m] = maxij(A)
+  [L,V] = yakobi(A, 6)
+  function [k, m] = maxij(A)
     k = 1;
     m = 2;
     for i = 1:(size(A, 1)-1)
@@ -11,10 +11,10 @@ A = [-4, -6, -10;
             if (abs(A(k, m)) < abs(A(i,j)))
                 k = i;
                 m = j;
-            endif
-        endfor
-    endfor
-  endfunction
+            end
+        end
+    end
+  end
    
   function [A, V] = yakobi(A, n)
     V = eye(size(A));
@@ -27,7 +27,7 @@ A = [-4, -6, -10;
         h
         V = V*h;
         A= inv(h)*A*h
-    endfor
- endfunction
+    end
+ end
  
- [L,V] = yakobi(A, 6)
+ 
