@@ -5,6 +5,8 @@
 #include <cmath>
 #include <functional>
 
+#define endl '\n'
+
 using namespace std;
 using f_RtoR = function<double(double)>; // сокращение названия типа по логике f : R -> R
 
@@ -21,6 +23,7 @@ void print_hYPQm(const  vector<double>& h,
                  const  vector<double>& P,
                  const  vector<double>& Q,
                  const  vector<double>& m){
+  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
   cout<<setw(width)<<line<<'+';
   for(int i=0; i<h.size(); ++i)
     cout<<line<<'+';

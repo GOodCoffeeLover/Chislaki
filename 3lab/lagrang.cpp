@@ -3,6 +3,8 @@
 #include <string>
 #include <iomanip>
 
+#define endl '\n'
+
 using namespace std;
 double lagrange(const vector<vector<double>>& p, double x0){
   double res=0;
@@ -24,11 +26,13 @@ int main(){
     {2, 2},
     {3,14}};
   double x0=1.5;
-  int width = 8;
+  int width = 12;
+  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
   string line(width, '-');
   
+  cout<<line<<'+'<<line<<'+'<<endl;
   cout<<setw(width)<<"x0"<<'|'<<setw(width)<<"L(x0)"<<'|'<<endl;
-  cout<<line<<'|'<<line<<'|'<<endl;
+  cout<<line<<'+'<<line<<'+'<<endl;
 
   for(int i=0; i<points.size(); ++i){
     if(i==0 && x0 < points[i][0]){
@@ -41,5 +45,6 @@ int main(){
       cout<<setw(width)<<x0<<'|'<<setw(width)<<lagrange(points, x0)<<'|'<<endl;
      }
   }
+  cout<<line<<'+'<<line<<'+'<<endl;
   return 0;
 }

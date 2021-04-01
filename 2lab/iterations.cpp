@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <cmath>
 #include <stdexcept>
+#define endl '\n'
 
 
 using namespace std;
@@ -20,10 +21,12 @@ double iterations(auto f, auto g, auto dg, double a,double b, int n){  //фун�
   }else 
     throw invalid_argument("|g\'(a)|>1 and |g\'(b)|>1"); //ни одна граница не подходит или функция подобрана неправильно
     
-  double ai=0.0, aii=0.0;              //предыдущие две точки
-  int width = 12;                      //ширина столбца таблицы
-  char line[width] = "------------";   //нижняя линия таблицы
+  double ai=0.0, aii=0.0;                   //предыдущие две точки
+  int width = 12;                           //ширина колонки таблицы
+  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
+  string line(width, '-');                  //нижняя линия ячейки таблицы
   //печать заголовка таблица
+  cout<<"---+"<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
   cout<<setw(3)<<"i"<<'|'
   <<setw(width)<<"a_i"<<'|'<<setw(width)<<"f(a)"<<'|'<<setw(width)<<"g(a)"<<'|'<<setw(width)<<"g\'(a)"<<'|'<<endl;
    cout<<"---+"<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
@@ -35,7 +38,7 @@ double iterations(auto f, auto g, auto dg, double a,double b, int n){  //фун�
 
     cout<<setw(3)<<i+1<<'|'
       <<setw(width)<<a<<'|'<<setw(width)<<f(a)<<'|'<<setw(width)<<g(a)<<'|'<<setw(width)<<dg(a)<<'|'<<endl;
-    cout<<"---+"<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl; печать линии таблицы
+    cout<<"---+"<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;  //печать линии таблицы
     
     if(i>=1 
         && ((a-ai)*(a-ai)/abs(2*ai-a-aii) < eps) //проверка окончания итерационного процеса начиная со второй итерации, т.к. с этого момента у нас есть a_i, a_{i-1} и a_{i-2}  

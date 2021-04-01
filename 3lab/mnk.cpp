@@ -3,6 +3,8 @@
 #include <string>
 #include <iomanip>
 
+#define endl '\n'
+
 using namespace std;
 
 vector<double> operator - (vector<double> l, const vector<double>& r ){
@@ -80,7 +82,8 @@ vector<double> mnk(const vector<vector<double>>& p, int step){
 }
 
 void print_points( vector<vector<double>> points){
-  int width = 4;
+  int width = 12;
+  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
   string line(width, '-');
   
   cout<<setw(width)<<line<<'+';

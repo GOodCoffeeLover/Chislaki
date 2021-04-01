@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <functional>
 #include <algorithm>
+#define endl '\n'
 
 using namespace std;                              
 using f_RxRtoR = function<double(double, double)>; // сокращение названия типа по логике f : RxR -> R
@@ -46,14 +47,15 @@ pair<double, double> linerization2x2( f_RxRtoR f[2], f_RxRtoR J[2][2], pair<doub
     {{ J[1][1]/(J[1][1]*J[0][0]-J[1][0]*J[0][1]), -J[0][1]/(J[1][1]*J[0][0]-J[1][0]*J[0][1])},     //a22/(a11*a22-a21*a12)     -a12/(a11*a22-a21*a12)
      {-J[1][0]/(J[1][1]*J[0][0]-J[1][0]*J[0][1]),  J[0][0]/(J[1][1]*J[0][0]-J[1][0]*J[0][1])} };   //-a21/(a11*a22-a21*a12)     a11/(a11*a22-a21*a12)
   
-  int width = 12;                                 //ширина столбца таблицы
-  char line[width] = "------------";              //горизонтальная линия ячейки
-  pair<double, double> prev;                      // предыдущая точка
+  int width = 12;                           //ширина столбца таблицы
+  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
+  string line(width, '-');                  //нижняя линия ячейки таблицы
+  pair<double, double> prev;                // предыдущая точка
 
   //печать заголовка таблицы
-  cout<<setw(3)<<"i"<<'|'
-  <<setw(width)<<"x"<<'|'<<setw(width)<<"y"<<'|'<<setw(width)<<"f1(x,y)"<<'|'<<setw(width)<<"f2(x,y)"<<'|'<<endl;
-    cout<<"---+"<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
+  cout<<"---+"<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
+  cout<<setw(3)<<"i"<<'|'<<setw(width)<<"x"<<'|'<<setw(width)<<"y"<<'|'<<setw(width)<<"f1(x,y)"<<'|'<<setw(width)<<"f2(x,y)"<<'|'<<endl;
+  cout<<"---+"<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
   
   for(int i=0; i<n; ++i){    //начало итерационного процесса 
     //печать очередной строки таблицы

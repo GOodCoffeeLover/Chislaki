@@ -3,6 +3,8 @@
 #include <string>
 #include <iomanip>
 
+#define endl '\n'
+
 using namespace std;
 //материал взят с 
 //http://www.machinelearning.ru/wiki/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%BF%D0%BE%D0%BB%D0%B8%D0%BD%D0%BE%D0%BC%D0%B0%D0%BC%D0%B8_%D0%9B%D0%B0%D0%B3%D1%80%D0%B0%D0%BD%D0%B6%D0%B0_%D0%B8_%D0%9D%D1%8C%D1%8E%D1%82%D0%BE%D0%BD%D0%B0
@@ -46,12 +48,14 @@ int main(){
     {2, 3},
     {3,28}};
   double x0=0.5;
-  int width = 8;
+  int width = 12;
+  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
   string line(width, '-');
  
   
+  cout<<line<<'+'<<line<<'+'<<endl;
   cout<<setw(width)<<"x0"<<'|'<<setw(width)<<"N(x0)"<<'|'<<endl;
-  cout<<line<<'|'<<line<<'|'<<endl;
+  cout<<line<<'+'<<line<<'+'<<endl;
 
   for(int i=0; i<points.size(); ++i){
     if(i==0 && x0 < points[i][0]){
@@ -64,5 +68,6 @@ int main(){
       cout<<setw(width)<<x0<<'|'<<setw(width)<<newton(points, x0)<<'|'<<endl;
      }
   }
+  cout<<line<<'+'<<line<<'+'<<endl;
   return 0;
 }

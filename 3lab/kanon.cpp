@@ -3,6 +3,8 @@
 #include <string>
 #include <iomanip>
 
+#define endl '\n'
+
 using namespace std;
 
 vector<double> operator - (vector<double> l, const vector<double>& r ){
@@ -63,11 +65,13 @@ int main(){
     { 1,-2},
     { 5,10}};
   double x0=0.5;
-  int width = 8;
-  string line(width, '-');
+  int width = 12;
+  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
+  string line(width, '-');                  //нижняя линия ячейки таблицы
   
   vector<double> pol = kanon(points);
   
+  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
   cout<<"P(x) = ";
   for(int i=0; i<pol.size(); ++i)
     cout<<((i>0 && pol[i]>=0)? '+'+to_string(pol[i]): to_string(pol[i])) <<" * x^"<<i<<' ';
@@ -88,5 +92,6 @@ int main(){
       cout<<setw(width)<<x0<<'|'<<setw(width)<<polynom_at(pol, x0)<<'|'<<endl;
      }
   }
+  cout<<line<<'+'<<line<<'+'<<endl;
   return 0;
 }

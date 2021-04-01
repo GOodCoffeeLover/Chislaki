@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
+#define endl '\n'
 
 using namespace std;
 
@@ -37,9 +38,11 @@ int main(){
     ans[i-1]=Q[i] + P[i]*ans[i];
   
   //print supporting calculations
+  int width = 12;
+  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
   for(int i = 0; i<ans.size(); ++i)
-    cout<<"P["<<i+1<<"] = "<<setw(10)<<P[i+1]
-      <<"  Q["<<i+1<<"] = "<<setw(10)<<Q[i+1]<<endl;
+    cout<<"P["<<i+1<<"] = "<<setw(width)<<P[i+1]
+      <<"  Q["<<i+1<<"] = "<<setw(width)<<Q[i+1]<<endl;
   //print answer
   cout<<"Answer:"<<endl;
   for(int i = 0; i<ans.size(); ++i){

@@ -4,6 +4,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <string>
+#define endl '\n'
 
 
 using namespace std;
@@ -21,9 +22,11 @@ double newton(auto f, auto df, auto ddf, double a,double b, int n){
     
   double ai;                           // следующая точка в приближении к ответу
   int width = 12;                      // ширина таблицы
-  char line[width] = "------------";   // нижняя линия ячейки таблицы 
-
+  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
+  string line(width, '-');                  //нижняя линия ячейки таблицы
+  
   //печать заголовка таблицы
+  cout<<"---+"<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
   cout<<setw(3)<<"i"<<'|'
   <<setw(width)<<"a_i"<<'|'<<setw(width)<<"f(a)"<<'|'<<setw(width)<<"f\'(a)"<<'|'<<setw(width)<<"f\'\'(a)"<<'|'<<setw(width)<<"a_{i+1}"<<'|'<<endl;
   cout<<"---+"<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
