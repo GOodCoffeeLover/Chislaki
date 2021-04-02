@@ -225,7 +225,7 @@ int main(){
                               {x2, vec[i].f(x2)}, 
                               {x3, vec[i].f(x3)},
                               {x4, vec[i].f(x4)}}, 3);
-    cout<<"[ "<<vec[i].l<<", "<<vec[i].r<<" ] : P_{"<<i+1<<"}(x) = "; print_pol(pol); cout<<endl;
+    cout<<"[ "<<vec[i].l<<", "<<vec[i].r<<" ] : S_{"<<i+1<<"}(x) = "; print_pol(pol); cout<<endl;
   }
   return 0;
 }
