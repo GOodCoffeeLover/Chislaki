@@ -30,9 +30,10 @@ double A(const vector<vector<double>>& p, int i){
 
 //N_n(x0) = sum_i^n A_i * prod_{k=0, i>0}^{i-1} (x0-x_k)
 double newton(const vector<vector<double>>& p, double x0){
-  double res=0, prod = 1;
+  double res=0, prod = 1, a;
   for(int i=0; i<p.size(); ++i){
-    res +=A(p, i)*prod;
+    a=A(p, i); 
+    res +=a*prod;
     prod*=(x0-p[i][0]);
   }
   return res;
@@ -48,16 +49,26 @@ int main(){
     {3, 4},
     {4, 7}
   };
+  // vector<vector<double>> points{
+  //   {0, -5},
+  //   {1, -6},
+  //   {2, 3},
+  //   {3, 28}
+  // };
   double x0=2.5;
   int width = 12;
   cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
   string line(width, '-');
  
   
+  cout<<"coeficients: ";
+ for(int i=0; i<points.size(); ++i)
+    cout<<A(points, i)<<' ';
+  cout<<endl;
+  
   cout<<line<<'+'<<line<<'+'<<endl;
   cout<<setw(width)<<"x0"<<'|'<<setw(width)<<"N(x0)"<<'|'<<endl;
   cout<<line<<'+'<<line<<'+'<<endl;
-
   for(int i=0; i<points.size(); ++i){
     if(i==0 && x0 < points[i][0]){
       cout<<setw(width)<<x0<<'|'<<setw(width)<<newton(points, x0)<<'|'<<endl;
