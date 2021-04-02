@@ -61,10 +61,12 @@ double polynom_at(vector<double> pol, double x0){
 
 int main(){
   vector<vector<double>> points{
-    {-1,4},
-    { 1,-2},
-    { 5,10}};
-  double x0=0.5;
+    {1, 4},
+    {2, 7},
+    {3, 4},
+    {4, 7}
+  };
+  double x0=2.5;
   int width = 12;
   cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
   string line(width, '-');                  //нижняя линия ячейки таблицы

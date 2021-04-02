@@ -16,7 +16,7 @@ struct spline
   double l, r;
 };
 
-const int width = 12;
+const int width = 8;
 const string line(width, '-');
 void print_hYPQm(const  vector<double>& h, 
                  const  vector<double>& Y,
@@ -116,14 +116,93 @@ vector<spline> make_spline(const  vector<vector<double>>& p){
 }
 
 
+vector<double> operator - (vector<double> l, const vector<double>& r ){
+  if(l.size()!=r.size())
+    return{};
+  for(int i=0; i<l.size(); ++i)
+    l[i]-=r[i];
+  return l;
+}
+
+vector<double> operator * (double l, vector<double> r ){
+  for(int i=0; i<r.size(); ++i)
+    r[i]*=l;
+  return r;
+}
+
+vector<double> operator * (vector<double> l,const vector<double>& r ){
+  for(int i=0; i<r.size(); ++i)
+    l[i]*=r[i];
+  return l;
+}
+
+double sum(vector<double> l){
+  double res=0;
+  for(double i:l )
+    res+=i;
+  return res;
+}
+
+vector<double> gaus(vector<vector<double>> syst){
+  if(syst.size() != (syst[0].size()-1))
+    return{};
+  vector<double> ans(syst.size());
+  for(int i=0; i<syst.size(); ++i){
+    for(int j=i+1; j<syst.size(); ++j)
+      syst[j]=syst[j]-(syst[j][i]/syst[i][i])*syst[i];
+  }
+
+  for(int i=syst.size()-1; i>=0; --i){
+    double sum=0;
+    for(int j=syst.size()-1; j>i; --j)
+      sum+=ans[j]*syst[i][j];
+    ans[i]=(syst[i].back()-sum)/syst[i][i];
+  }
+  return ans;
+}
+
+vector<double> mnk(const vector<vector<double>>& p, int step){
+  
+  const int mnk_step=step+1;
+  vector<double> x_pow(p.size(), 1), x(p.size()), y(p.size());
+  
+  for(int i=0; i<p.size(); ++i){
+    x[i]=p[i][0];
+    y[i]=p[i][1];
+  }
+  
+  vector<vector<double>> syst(mnk_step, vector<double>(mnk_step+1));
+  
+  for(int i=0; i<(2*mnk_step-1); ++i){
+    double s=sum(x_pow);
+    
+    if(i<mnk_step)
+      syst[i].back() = sum(x_pow*y);
+    
+    for(int j=0; j<=i; ++j)
+      if(j<mnk_step && i-j<mnk_step)
+        syst[j][i-j]=s;
+    
+    x_pow=x_pow*x;
+   
+  }
+  return gaus(syst);
+}
+
+void print_pol(vector<double> pol){
+  for(int i=0; i<pol.size(); ++i)
+    cout<<((i>0 && pol[i]>=0)? '+'+to_string(pol[i]): to_string(pol[i])) <<" * x^"<<i<<' ';
+  
+  return;
+}
+
 int main(){
   vector<vector<double>> points
- {{ 0.0, 2.0},
-  { 1.0, 4.0},
-  { 3.0, 6.0},
-  { 6.0, 7.0},
-  {10.0, 3.0}};
-  double x0=2.0;
+ {{ 2.0, -3.0},
+  { 3.0, -7.0},
+  { 4.0,-10.0},
+  { 5.0,-13.0}};
+  //double x0=2.0;
   vector<spline> vec = make_spline(points);
   cout<<endl;
   cout<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
@@ -132,10 +211,21 @@ int main(){
   
   for(int i=0; i<(vec.size()); ++i){
     cout<<setw(width)<<i<<'|'<<setw(width)<<vec[i].l<<'|'<<setw(width)<<vec[i].f(vec[i].l)<<'|'<<endl;
-    if(vec[i].l<x0 && x0<vec[i].r)
-          cout<<setw(width)<<' '<<'|'<<setw(width)<<x0<<'|'<<setw(width)<<vec[i].f(x0)<<'|'<<endl;
+    //if(vec[i].l<x0 && x0<vec[i].r)
+    cout<<setw(width)<<' '<<'|'<<setw(width)<<(vec[i].l+vec[i].r)/2.0<<'|'<<setw(width)<<vec[i].f((vec[i].l+vec[i].r)/2.0)<<'|'<<endl;
     cout<<setw(width)<<' '<<'|'<<setw(width)<<vec[i].r<<'|'<<setw(width)<<vec[i].f(vec[i].r)<<'|'<<endl;
     cout<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
+  }
+  for(int i=0; i<(vec.size()); ++i){
+    double x1 = vec[i].l,
+           x2 = vec[i].l + (vec[i].r-vec[i].l)/3.0,
+           x3 = vec[i].l+ 2.0*(vec[i].r-vec[i].l)/3.0,
+           x4 = vec[i].r;
+    vector<double> pol = mnk({{x1, vec[i].f(x1)},
+                              {x2, vec[i].f(x2)}, 
+                              {x3, vec[i].f(x3)},
+                              {x4, vec[i].f(x4)}}, 3);
+    cout<<"[ "<<vec[i].l<<", "<<vec[i].r<<" ] : P_{"<<i+1<<"}(x) = "; print_pol(pol); cout<<endl;
   }
   return 0;
 }

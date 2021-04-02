@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <iomanip>
+#include <cmath>
 
 #define endl '\n'
 
@@ -113,41 +114,67 @@ void print_points( vector<vector<double>> points){
   
 }
 
+double polynom_at(const vector<double>& pol, double x0){
+  double pow=1, res=0;
+  for(int i=0; i<pol.size(); ++i){
+    res+=pow*pol[i];
+    pow*=x0;
+  }
+  return res;
+}
+
+double newazka(vector<double> pol, const vector<vector<double>>& points ){
+  double res=0.0;
+  for(const vector<double>& p : points)
+    res+=pow((p[1] - polynom_at(pol, p[0])), 2.0);
+  return res;
+}
+
+void print_pol(vector<double> pol){
+  for(int i=0; i<pol.size(); ++i)
+    cout<<((i>0 && pol[i]>=0)? '+'+to_string(pol[i]): to_string(pol[i])) <<" * x^"<<i<<' ';
+  return;
+}
 
 int main(){
-  vector<vector<double>> points1{
-    {-2, 3},
-    {-1, 4},
-    { 0, 2},
-    { 1, 1},
-    { 2, 1}};
+  // vector<vector<double>> points1{
+  //   {-2, 3},
+  //   {-1, 4},
+  //   { 0, 2},
+  //   { 1, 1},
+  //   { 2, 1}};
 
-  vector<vector<double>> points2{
-    { 1, 7},
-    { 2, 7},
-    { 3, 6},
-    { 4, 7},
-    { 5, 6},
-    { 6, 5},
-    { 7, 4},
-    { 8, 4},
-    { 9, 4},
-    {10, 3}};
+  // vector<vector<double>> points2{
+  //   { 1, 7},
+  //   { 2, 7},
+  //   { 3, 6},
+  //   { 4, 7},
+  //   { 5, 6},
+  //   { 6, 5},
+  //   { 7, 4},
+  //   { 8, 4},
+  //   { 9, 4},
+  //   {10, 3}};
   
+  vector<vector<double>> points{
+    {-2,-4},
+    {-1, 0},
+    { 1, -2},
+    { 3, -16}};
 
-  print_points(points1);
-  vector<double> pol = mnk(points1, 2);
-  cout<<"P(x) = ";
-  for(int i=0; i<pol.size(); ++i)
-    cout<<((i>0 && pol[i]>=0)? '+'+to_string(pol[i]): to_string(pol[i])) <<" * x^"<<i<<' ';
+  print_points(points);
+  vector<double> pol = mnk(points, 2); 
+  cout<<"P2(x) = ";
+  print_pol(pol);
   cout<<endl;
+  cout<<"Newazka = "<<newazka(pol, points)<<endl;
   cout<<endl;
   
-  print_points(points2);
-  pol = mnk(points2, 1);
-  cout<<"P(x) = ";
-  for(int i=0; i<pol.size(); ++i)
-    cout<<((i>0 && pol[i]>=0)? '+'+to_string(pol[i]): to_string(pol[i])) <<" * x^"<<i<<' ';
+  print_points(points);
+  pol = mnk(points, 1);
+  cout<<"P1(x) = ";
+  print_pol(pol);
   cout<<endl;
+  cout<<"Newazka = "<<newazka(pol, points)<<endl;
   return 0;
 }
