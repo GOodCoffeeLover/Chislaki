@@ -5,6 +5,7 @@
 
 #define endl '\n'
 
+const int width = 12;
 using namespace std;
 
 vector<double> operator - (vector<double> l, const vector<double>& r ){
@@ -47,6 +48,12 @@ vector<double> kanon(vector<vector<double>> p){
       syst[i][j]=p[i][0]*syst[i][j-1];
     syst[i].back() = p[i][1];
   } 
+  cout<<"System"<<endl;
+  for(auto l: syst){
+    for(double d: l)
+      cout<<setw(width)<<d<<' ';
+    cout<<endl;
+  }
   return gaus(syst);
 }
 
@@ -67,14 +74,13 @@ int main(){
     {4, 7}
   };
   double x0=2.5;
-  int width = 12;
+  
   cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
   string line(width, '-');                  //нижняя линия ячейки таблицы
   
   vector<double> pol = kanon(points);
   
-  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
-  cout<<"P(x) = ";
+  cout<<endl<<"P(x) = ";
   for(int i=0; i<pol.size(); ++i)
     cout<<((i>0 && pol[i]>=0)? '+'+to_string(pol[i]): to_string(pol[i])) <<" * x^"<<i<<' ';
   cout<<endl;
