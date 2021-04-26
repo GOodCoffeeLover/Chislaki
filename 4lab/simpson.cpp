@@ -34,7 +34,7 @@ double int_simpson(auto f, double l, double r, int n){
   return res;
 }
 
-double Runge(pair<double, double> r1, pair<double, double>r2, int p){
+double Runge_Romberg(pair<double, double> r1, pair<double, double>r2, int p){
   return r1.first + (r1.first - r2.first)/(pow(r2.second/r1.second, double(p))-1);
 }
 
@@ -51,7 +51,7 @@ int main(){
   
   res2 = int_simpson(f, l, r,(r-l)/h2);
   cout<<"ans = "<<res2<<endl;
-  res3=Runge({res1, h1}, {res2, h2}, 4);
-  cout<<"R ans = "<<res3<<endl;
+  res3=Runge_Romberg({res1, h1}, {res2, h2}, 4);
+  cout<<"R-R ans = "<<res3<<endl;
   return 0;
 }

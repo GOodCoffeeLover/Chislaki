@@ -10,13 +10,13 @@
 
 using namespace std;
 
+const int width = 14;
+const string line(width, '-');
 struct condintion{
   double A, B, C;
   
 };
 
-const int width = 14;
-const string line(width, '-');
 
 vector<double> progonka(const vector<vector<double>>& mtrix){
   vector<double> P(mtrix.size()+1, 0.0), 
@@ -25,11 +25,12 @@ vector<double> progonka(const vector<vector<double>>& mtrix){
   
   for(int i=1; i<P.size(); ++i)
     //Pi = -ci/(bi + ai * P(i-1))
-    P[i]=-mtrix[i-1][2]/(mtrix[i-1][1] + mtrix[i-1][0]*P[i-1]); 
-  
+    cout<<"P["<<i+1<<"] = "<<(P[i]=-mtrix[i-1][2]/(mtrix[i-1][1] + mtrix[i-1][0]*P[i-1]))<<endl; 
+  cout<<endl;
+
   for(int i=1; i<Q.size(); ++i)
     //Qi = (di - ai*Q(i-1)) / (bi + ai * P(i-1))
-    Q[i] = (mtrix[i-1][3] - mtrix[i-1][0]*Q[i-1])/(mtrix[i-1][1] + mtrix[i-1][0]*P[i-1]);
+    cout<<"Q["<<i+1<<"] = "<<(Q[i] = (mtrix[i-1][3] - mtrix[i-1][0]*Q[i-1])/(mtrix[i-1][1] + mtrix[i-1][0]*P[i-1]))<<endl;
   
   //xn = qn
   ans[ans.size()-1] = Q[Q.size()-1];
@@ -55,11 +56,13 @@ vector<pair<double, double>> Finite_diff(auto F, auto K, auto L, auto M, pair<do
   matrix.push_back({cn.A/h, -cn.A/h-c0.B, 0, -cn.C});
 
   cout<<"matrix:\n";
-  for(auto l: matrix){
-    for(double d: l)
-      cout<<setw(width)<<d<<' ';
+  cout<<setw(width)<<'a'<<'|'<<setw(width)<<'b'<<'|'<<setw(width)<<'c'<<'|'<<setw(width)<<'d'<<'|'<<endl;
+  for(const auto& l: matrix){
+    for(const double& d: l)
+      cout<<setw(width)<<d<<'|';
     cout<<endl;
   }
+  cout<<endl;
 
   vector<double> ans = progonka(matrix);
   for(int i=0; i<=n; ++i)
@@ -68,16 +71,16 @@ vector<pair<double, double>> Finite_diff(auto F, auto K, auto L, auto M, pair<do
 
 }
 
+
 int main(){
-  auto F = [](double x){return 2*sqrt(x);};
-  auto K = [](double x){return (2*x*x);};
-  auto L = [](double x){return (x);};
-  auto M = [](double x){return 1;};
-  double l=1.0, r=10.0, y0=2.0, yn = 2.0*sqrt(10.0);
+  auto F = [](double x){return -5*x*x -5*x -1;};
+  auto K = [](double x){return 2;};
+  auto L = [](double x){return -1;};
+  auto M = [](double x){return -4;};
+  double l=1.0, r=2.0, y0=3.0, yn = 5.0, h =0.20;
  
-  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
-  
-  vector<pair<double, double>> pnts = Finite_diff(F, K, L, M, {l, r}, {0, 1, y0}, {0, 1, yn}, 4);
+  cout<<setprecision(width-6)<<fixed;       //количество знаков после запятой
+  vector<pair<double, double>> pnts = Finite_diff(F, K, L, M, {l, r}, {0, 5, y0}, {0, 5, yn}, (r-l)/h);
   
   cout<<"---+"<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<endl;
   cout<<setw(3)<<'i'<<'|'<<setw(width)<<'x'<<'|'<<setw(width)<<'y'<<'|'<<endl;
@@ -87,6 +90,7 @@ int main(){
     cout<<setw(3)<<i<<'|'<<setw(width)<<pnts[i].first<<'|'<<setw(width)<<pnts[i].second<<'|'<<endl;
     cout<<"---+"<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<endl;
   }
+  cout<<"h = "<<h<<endl;
   
   return 0;
 }

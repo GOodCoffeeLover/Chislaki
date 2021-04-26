@@ -47,7 +47,7 @@ double int_trapeze(auto f, double l, double r, int n){
   return res;
 }
 
-double Runge_Romberg(vector<pair<double, double>> res, int p){
+double Runge(vector<pair<double, double>> res, int p){
   vector<vector<double>> M1(res.size(), vector<double>(res.size(), 1.0)),
                          M2(res.size(), vector<double>(res.size(), 1.0));
   for(int i=0; i<res.size(); ++i){
@@ -79,7 +79,7 @@ int main(){
   h3=0.25;
   res3 = int_trapeze(f, l, r,(r-l)/h3);
   cout<<"ans = "<<res3<<endl;
-  res4=Runge_Romberg({{res1, h1}, {res2, h2}, {res3, h3}}, 2);
-  cout<<"R-R ans = "<<res4<<endl;
+  res4=Runge({{res1, h1}, {res2, h2}, {res3, h3}}, 2);
+  cout<<"R ans = "<<res4<<endl;
   return 0;
 }

@@ -50,12 +50,24 @@ double compute_at(const vector<pair<double, double>> & pnts, double x0){
       return pnts[i].second + (x0 - pnts[i].first)/(pnts[i+1].first - pnts[i].first)*(pnts[i+1].second - pnts[i].second);
 }
 
+double Runge_Romberg(pair<double, double> r1, pair<double, double>r2, int p){
+  return r1.first + (r1.first - r2.first)/(pow(r2.second/r1.second, double(p))-1);
+}
+
 int main(){
-  auto f = [](double x, double y){return y/(2*x);};
-  double l=1.0, r=10.0, y0=2.0;
-  vector<pair<double, double>> pnts = Rugne_Kutt(f, l, r, y0, 5);
+  auto f = [](double x, double y){return -2 *y + x*x -2;};
+  double l=8.0, r=12.0, y0=-1.0, x0=12.0;
+  vector<double> h{1.0, 0.5}; 
+  vector<pair<double, double>> reses{};
+  double yn;
+  for(int i=0; i<h.size(); ++i ){
+    
+    vector<pair<double, double>> pnts = Rugne_Kutt(f, l, r, y0, (r-l)/h[i]);
+    cout<<"h"<<i+1<<" = "<<h[i] <<", y( "<<x0<<" )= "<<(yn=compute_at(pnts, x0))<<endl<<endl;
+    reses.push_back({yn, h[i]});
+  }
+  yn = Runge_Romberg(reses[0], reses[1], 4); 
+  cout<<"R-R y( "<<x0<<" )= "<<yn<<endl;
   
-  double x0=3.0;
-  cout<<"y( "<<x0<<" )= "<<compute_at(pnts, x0)<<endl;
   return 0;
 }

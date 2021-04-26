@@ -14,9 +14,9 @@ vector<pair<double, double>> Rugne_Kutt(auto f, double l, double r, double y0, d
   double h=(r-l)/n, ky1, ky2, ky3, ky4, kz1, kz2, kz3, kz4;
   res[0]={l, y0};
   z[0]=z0;
-  const int width = 10;
+  const int width = 14;
   const string line(width, '-');
-  cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
+  cout<<setprecision(width-8)<<fixed;       //количество знаков после запятой
   
   cout<<"---+"<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<endl;
   cout<<setw(3)<<'i'<<'|'<<setw(width)<<'x'<<'|'<<setw(width)<<'y'<<'|'<<setw(width)<<'z'<<'|'<<setw(width)<<"ky1"<<'|'<<setw(width)<<"kz1"<<'|'<<setw(width)<<"ky2"<<'|'<<setw(width)<<"kz2"<<'|'<<setw(width)<<"ky3"<<'|'<<setw(width)<<"kz3"<<'|'<<setw(width)<<"ky4"<<'|'<<setw(width)<<"kz4"<<'|'<<endl;
@@ -54,13 +54,26 @@ double compute_at(const vector<pair<double, double>> & pnts, double x0){
       return pnts[i].second + (x0 - pnts[i].first)/(pnts[i+1].first - pnts[i].first)*(pnts[i+1].second - pnts[i].second);
 }
 
+double Runge_Romberg(pair<double, double> r1, pair<double, double>r2, int p){
+  return r1.first + (r1.first - r2.first)/(pow(r2.second/r1.second, double(p))-1);
+}
+
 int main(){
-  auto f = [](double x, double y, double z){return -z/(2*x);};
-  double l=1.0, r=10.0, y0=2.0, z0=1.0;
-  vector<pair<double, double>> pnts = Rugne_Kutt(f, l, r, y0, z0, 5);
+  auto f = [](double x, double y, double z){return z - 2*y + 3*x-6;};
+  double l=-3.0, r=-1.0, y0=-2.0, z0=-6.0, x0=r;
+  vector<double> h{0.5, 0.25}; 
+  vector<pair<double, double>> reses{};
+  vector<pair<double, double>> pnts;
+  double yn;
+
+  for(int i=0; i<h.size(); ++i ){
+    //cout<<"h"<<i+1<<" = "<<h[i]<<endl;
+   	pnts = Rugne_Kutt(f, l, r, y0, z0, (r-l)/h[i]);
+    cout<<"h"<<i+1<<" = "<<h[i] <<", y( "<<x0<<" )= "<<(yn=compute_at(pnts, x0))<<endl<<endl;
+    reses.push_back({yn, h[i]});
+  }
+  yn = Runge_Romberg(reses[0], reses[1], 4); 
+  cout<<"R-R y( "<<x0<<" )= "<<yn<<endl;
   
- 
-  double x0=3.0;
-  cout<<"y( "<<x0<<" )= "<<compute_at(pnts, x0)<<endl;
-  return 0;
+ return 0;
 }
