@@ -9,19 +9,20 @@
 
 
 using namespace std;
-
+//метод Рунге-Кутта для решения оду первого порядка y' = f(x,y), на отрезке [l, r] начальными условиями y(l) = y0
 vector<pair<double, double>> Rugne_Kutt(auto f, double l, double r, double y0, int n){
+  
   vector<pair<double, double>> res(n+1, {0,0});
   double h=(r-l)/n, k1, k2, k3, k4;
   res[0]={l, y0};
-   const int width = 14;
+  const int width = 14;
   const string line(width, '-');
   cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
-  
+  //печать заголовка таблицы
   cout<<"---+"<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<endl;
   cout<<setw(3)<<'i'<<'|'<<setw(width)<<'x'<<'|'<<setw(width)<<'y'<<'|'<<setw(width)<<"k1"<<'|'<<setw(width)<<"k2"<<'|'<<setw(width)<<"k3"<<'|'<<setw(width)<<"k4"<<'|'<<endl;
   cout<<"---+"<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<endl;
-
+  // подсчёт следующй точки и печать его в таблицу
   for(int i=0; i<n; ++i){
     k1=f(res[i].first, res[i].second);
     k2=f(res[i].first +h/2.0, res[i].second + h/2.0*k1);
@@ -38,7 +39,7 @@ vector<pair<double, double>> Rugne_Kutt(auto f, double l, double r, double y0, i
    cout<<"---+"<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<endl;
   return res;
 }
-
+//вычисление значения на ломанной по точками pnts в точке x0
 double compute_at(const vector<pair<double, double>> & pnts, double x0){
   if(x0<pnts[0].first)
     throw logic_error("x0<l");
@@ -49,23 +50,26 @@ double compute_at(const vector<pair<double, double>> & pnts, double x0){
     if(pnts[i].first <=x0 && pnts[i+1].first >=x0)
       return pnts[i].second + (x0 - pnts[i].first)/(pnts[i+1].first - pnts[i].first)*(pnts[i+1].second - pnts[i].second);
 }
-
+//Уточнение Рунге-Ромберга
 double Runge_Romberg(pair<double, double> r1, pair<double, double>r2, int p){
   return r1.first + (r1.first - r2.first)/(pow(r2.second/r1.second, double(p))-1);
 }
 
 int main(){
+  //начальные условия
   auto f = [](double x, double y){return -2 *y + x*x -2;};
   double l=8.0, r=12.0, y0=-1.0, x0=12.0;
   vector<double> h{1.0, 0.5}; 
+  
   vector<pair<double, double>> reses{};
   double yn;
+  //вычисление про разных шагах
   for(int i=0; i<h.size(); ++i ){
-    
     vector<pair<double, double>> pnts = Rugne_Kutt(f, l, r, y0, (r-l)/h[i]);
     cout<<"h"<<i+1<<" = "<<h[i] <<", y( "<<x0<<" )= "<<(yn=compute_at(pnts, x0))<<endl<<endl;
     reses.push_back({yn, h[i]});
   }
+  //уточнение значения с помозью формулы Рунге-Ромберга 
   yn = Runge_Romberg(reses[0], reses[1], 4); 
   cout<<"R-R y( "<<x0<<" )= "<<yn<<endl;
   

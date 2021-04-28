@@ -9,18 +9,23 @@
 using namespace std;
 
 const double eps =0.000000000001;
-
-vector<pair<double, double>> euler(auto f, double l, double r, double y0, double z0, int n){
+                              
+vector<pair<double, double>> euler(auto f, double l, double r, double y0, double z0, int n){//решение диффура вида y'' = f(x, y, y') на отрезке [l, r] с начальными условиями y(l)=y0, y'(l)=z0
   vector<pair<double, double>> res(n+1, {0,0});
   vector<double> z(n+1, 0);
   double h=(r-l)/n;
+  задание начальной точки
   res[0]={l, y0};
   z[0]=z0;
+  //вычисление следующих точек по формуле 
+  //x_{i+1}=x_i + h
+  //y_{i+1}=y_i + h*y'_i
+  //y'_{i+1} = y'_i + h*f(x_i, y_i, y'_i)
   for(int i=0; i<n; ++i){
     res[i+1]={res[i].first + h, res[i].second + h*z[i]};
     z[i+1] =z[i] + h*f(res[i].first, res[i].second, z[i]); 
   }
-
+  //печать промежуточных значений
   const int width = 14;
   const string line(width, '-');
   cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
@@ -33,10 +38,10 @@ vector<pair<double, double>> euler(auto f, double l, double r, double y0, double
     cout<<setw(3)<<i<<'|'<<setw(width)<<res[i].first<<'|'<<setw(width)<<res[i].second<<'|'<<setw(width)<<z[i]<<'|'<<endl;
     cout<<"---+"<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<setw(width)<<line<<'+'<<endl;
   }
-
-
   return res;
 }
+
+
 double compute_at(const vector<pair<double, double>> & pnts, double x0){
   if(x0<(pnts[0].first-eps)){
     throw logic_error("x0<l");
@@ -85,9 +90,11 @@ double Runge(vector<pair<double, double>> res, int p){
 }
 
 int main(){
+  //начальные условия
   auto f = [](double x, double y, double z){return  z-2*y + 3*x -6;};
   double l=-3.0, r=-1.0, y0=-2.0, z0=-6.0, x0=r;
   vector<double> h{0.50, 0.250, 0.200}; 
+  //вектор, в который будем складывать результаты и шаги вычисления
   vector<pair<double, double>> reses{};
   double yn;
   
