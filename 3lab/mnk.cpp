@@ -7,34 +7,38 @@
 #define endl '\n'
 
 using namespace std;
-
+//операторы для работы с векторами(строками матрицы)
+//вычитание одного вектора из другого
 vector<double> operator - (vector<double> l, const vector<double>& r ){
   if(l.size()!=r.size())
     return{};
   for(int i=0; i<l.size(); ++i)
     l[i]-=r[i];
   return l;
-}
-
+} 
+//умножение на число
 vector<double> operator * (double l, vector<double> r ){
   for(int i=0; i<r.size(); ++i)
     r[i]*=l;
   return r;
 }
-
+//поэлементное произведение
 vector<double> operator * (vector<double> l,const vector<double>& r ){
   for(int i=0; i<r.size(); ++i)
     l[i]*=r[i];
   return l;
 }
 
+//сумма всех элементов
 double sum(vector<double> l){
   double res=0;
   for(double i:l )
     res+=i;
   return res;
 }
+//=================================
 
+//наивнейший метод Гаусса
 vector<double> gaus(vector<vector<double>> syst){
   if(syst.size() != (syst[0].size()-1))
     return{};
@@ -53,35 +57,41 @@ vector<double> gaus(vector<vector<double>> syst){
   return ans;
 }
 
-
+//сам мнк
 vector<double> mnk(const vector<vector<double>>& p, int step){
   
   const int mnk_step=step+1;
-  vector<double> x_pow(p.size(), 1), x(p.size()), y(p.size());
+  vector<double> x_pow(p.size(), 1), x(p.size()), y(p.size());//создание  вспосогательных массивов  x_pow[i] = x[i]^k, где k- какая-то степень, которую мы получаем
   
   for(int i=0; i<p.size(); ++i){
     x[i]=p[i][0];
     y[i]=p[i][1];
   }
   
+  //формирование расширенной матрицы, которую мы решаем
+  // sum xi^0  sum xi^1  sum xi^2 | sum xi^0 * yi  
+  // sum xi^1  sum xi^2  sum xi^3 | sum xi^1 * yi
+  // sum xi^2  sum xi^3  sum xi^4 | sum xi^2 * yi
   vector<vector<double>> syst(mnk_step, vector<double>(mnk_step+1));
   
   for(int i=0; i<(2*mnk_step-1); ++i){
+    //получаем sum xi^k
     double s=sum(x_pow);
     
+    // заполенние последнего столбца, т.е. получение sum xi^k * yi 
     if(i<mnk_step)
       syst[i].back() = sum(x_pow*y);
-    
+    //заполнение по диагонали значениями sum xi^k
     for(int j=0; j<=i; ++j)
       if(j<mnk_step && i-j<mnk_step)
         syst[j][i-j]=s;
     
-    x_pow=x_pow*x;
+    x_pow=x_pow*x;//увелечение степени
    
   }
-  return gaus(syst);
+  return gaus(syst);//возвращение результата решения данной системы
 }
-
+//печать точек
 void print_points( vector<vector<double>> points){
   int width = 12;
   cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
@@ -113,7 +123,7 @@ void print_points( vector<vector<double>> points){
   cout<<endl;
   
 }
-
+//функция высчитывания значения полинома в точке.
 double polynom_at(const vector<double>& pol, double x0){
   double pow=1, res=0;
   for(int i=0; i<pol.size(); ++i){
@@ -122,7 +132,7 @@ double polynom_at(const vector<double>& pol, double x0){
   }
   return res;
 }
-
+//подсчёт невязки
 double newazka(vector<double> pol, const vector<vector<double>>& points ){
   double res=0.0;
   for(const vector<double>& p : points)
@@ -130,6 +140,7 @@ double newazka(vector<double> pol, const vector<vector<double>>& points ){
   return res;
 }
 
+//печать многочлена
 void print_pol(vector<double> pol){
   for(int i=0; i<pol.size(); ++i)
     cout<<((i>0 && pol[i]>=0)? '+'+to_string(pol[i]): to_string(pol[i])) <<" * x^"<<i<<' ';
@@ -137,31 +148,13 @@ void print_pol(vector<double> pol){
 }
 
 int main(){
-  // vector<vector<double>> points1{
-  //   {-2, 3},
-  //   {-1, 4},
-  //   { 0, 2},
-  //   { 1, 1},
-  //   { 2, 1}};
-
-  // vector<vector<double>> points2{
-  //   { 1, 7},
-  //   { 2, 7},
-  //   { 3, 6},
-  //   { 4, 7},
-  //   { 5, 6},
-  //   { 6, 5},
-  //   { 7, 4},
-  //   { 8, 4},
-  //   { 9, 4},
-  //   {10, 3}};
-  
+  //начальные условия
   vector<vector<double>> points{
     {-2,-4},
     {-1, 0},
     { 1, -2},
     { 3, -16}};
-
+//мнк для параболы
   print_points(points);
   vector<double> pol = mnk(points, 2); 
   cout<<"P2(x) = ";
@@ -169,7 +162,7 @@ int main(){
   cout<<endl;
   cout<<"Newazka = "<<newazka(pol, points)<<endl;
   cout<<endl;
-  
+//мнк для линии  
   print_points(points);
   pol = mnk(points, 1);
   cout<<"P1(x) = ";

@@ -8,7 +8,7 @@
 #define endl '\n'
 
 using namespace std;       
-
+//интегрирование по формуле симпсона h/3*( f(l) + 4*sum_{i=1,3,5..}f(xi) + 2*sum_{i=2,4,6..}f(xi) + f(b)))
 double int_simpson(auto f, double l, double r, int n){
   double h = (r-l)/double(n), res=0;
   int width = 12;                           //ширина столбца таблицы
@@ -34,6 +34,7 @@ double int_simpson(auto f, double l, double r, int n){
   return res;
 }
 
+//уточнение по формуле Рунге-Ромберга r = r1 + (r1-r2)/((h2/h1)^p -1)
 double Runge_Romberg(pair<double, double> r1, pair<double, double>r2, int p){
   return r1.first + (r1.first - r2.first)/(pow(r2.second/r1.second, double(p))-1);
 }
@@ -41,8 +42,9 @@ double Runge_Romberg(pair<double, double> r1, pair<double, double>r2, int p){
 
 int main(){
   //auto f= [](double x){ return sin(x);};
-  auto f= [](double x){ return (-2*x+1)/(x*x+9);};
   //double l=0, r=M_PI/2, h1=M_PI/8, h2 = M_PI/16;
+  //началные условия
+  auto f= [](double x){ return (-2*x+1)/(x*x+9);};
   double l=-4, r=0, h1=1.0, h2=0.5;
   double res1, res2, res3;
   

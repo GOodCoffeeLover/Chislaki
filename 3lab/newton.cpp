@@ -9,6 +9,8 @@ using namespace std;
 //материал взят с 
 //http://www.machinelearning.ru/wiki/index.php?title=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BF%D0%BE%D0%BB%D1%8F%D1%86%D0%B8%D1%8F_%D0%BF%D0%BE%D0%BB%D0%B8%D0%BD%D0%BE%D0%BC%D0%B0%D0%BC%D0%B8_%D0%9B%D0%B0%D0%B3%D1%80%D0%B0%D0%BD%D0%B6%D0%B0_%D0%B8_%D0%9D%D1%8C%D1%8E%D1%82%D0%BE%D0%BD%D0%B0
 
+//нерекурсивный метод Ньютона
+
 //omega_{k,i} = prod_{j=0, j!=k}^i (x_k - x_j)
 double omega(const vector<vector<double>>& p, int k, int i){
   double res=1;
@@ -43,29 +45,26 @@ double newton(const vector<vector<double>>& p, double x0){
 
 
 int main(){
+  //начальные условия
   vector<vector<double>> points{
     //{1, 4},
     {2, 7},
     {3, 4},
     {4, 7}
   };
-  // vector<vector<double>> points{
-  //   {0, -5},
-  //   {1, -6},
-  //   {2, 3},
-  //   {3, 28}
-  // };
   double x0=2.5;
+ 
   int width = 12;
   cout<<setprecision(width-4)<<fixed;       //количество знаков после запятой
   string line(width, '-');
  
-  
+  //печать коэффициентов
   cout<<"coeficients: ";
- for(int i=0; i<points.size(); ++i)
+  for(int i=0; i<points.size(); ++i)
     cout<<A(points, i)<<' ';
   cout<<endl;
   
+  //печать таблицы
   cout<<line<<'+'<<line<<'+'<<endl;
   cout<<setw(width)<<"x0"<<'|'<<setw(width)<<"N(x0)"<<'|'<<endl;
   cout<<line<<'+'<<line<<'+'<<endl;

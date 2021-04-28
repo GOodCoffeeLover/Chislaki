@@ -8,7 +8,7 @@
 #define endl '\n'
 
 using namespace std;       
-
+//вычисление определителя матрицы
 double det(const vector<vector<double>>& matrix){
   double res=0, one = 1; 
   if(matrix.size()==1)
@@ -26,6 +26,27 @@ double det(const vector<vector<double>>& matrix){
   return res;
 }
 
+//уточнение по формуле Рунге
+double Runge(vector<pair<double, double>> res, int p){
+  //матрицы
+  vector<vector<double>> M1(res.size(), vector<double>(res.size(), 1.0)),//формат строки матрицы res[i] h[i]^p ... h[i]^p+n-2
+                         M2(res.size(), vector<double>(res.size(), 1.0));//формат строки матрицы      1 h[i]^p ... h[i]^p+n-2
+  //формирование матриц
+  for(int i=0; i<res.size(); ++i){
+    M1[i][0]=res[i].first;
+    for(int j=1; j<res.size(); ++j){
+      M1[i][j]=pow(res[i].second, double(p+j-1));
+      M2[i][j]=pow(res[i].second, double(p+j-1));
+    }
+  }
+  //формирование ответа(уточнения)
+  double D1=det(M1), D2=det(M2); 
+  cout<<"D1 = "<<D1<<" D2 = "<<D2<<endl;
+  return D1/D2;
+
+}
+
+
 double int_trapeze(auto f, double l, double r, int n){
   double h = (r-l)/double(n), res=0;
   int width = 12;                           //ширина столбца таблицы
@@ -35,6 +56,7 @@ double int_trapeze(auto f, double l, double r, int n){
   cout<<line<<'+'<<line<<'+'<<endl;
   cout<<setw(width)<<'X'<<'|'<<setw(width)<<'Y'<<'|'<<endl;
   cout<<line<<'+'<<line<<'+'<<endl;
+  //печать таблицы и подсчёт значений по формуле трапеций h/2*(f(l)+2*sum f(xi) + f(b))
   for(int i=0; i<=n; ++i){
     if(i==0 || i==n)
       res+=h/2.0*f(l+double(i)*h);
@@ -47,28 +69,14 @@ double int_trapeze(auto f, double l, double r, int n){
   return res;
 }
 
-double Runge(vector<pair<double, double>> res, int p){
-  vector<vector<double>> M1(res.size(), vector<double>(res.size(), 1.0)),
-                         M2(res.size(), vector<double>(res.size(), 1.0));
-  for(int i=0; i<res.size(); ++i){
-    M1[i][0]=res[i].first;
-    for(int j=1; j<res.size(); ++j){
-      M1[i][j]=pow(res[i].second, double(p+j-1));
-      M2[i][j]=pow(res[i].second, double(p+j-1));
-    }
-  }
-  double D1=det(M1), D2=det(M2); 
-  cout<<"D1 = "<<D1<<" D2 = "<<D2<<endl;
-  return D1/D2;
-
-}
-
-
 int main(){
   //auto f= [](double x){ return sin(x);};
-  auto f= [](double x){ return (-2*x+1)/(x*x+9);};
   //double l=0, r=M_PI/2, h=1.0;
+  
+  //начальные условия
+  auto f= [](double x){ return (-2*x+1)/(x*x+9);};
   double l=-4, r=0, h1, h2, h3;
+  //интегрирование с  разными шагами
   double res1, res2, res3,res4;
   h1=1.0;
   res1 = int_trapeze(f, l, r,(r-l)/h1);
@@ -79,6 +87,7 @@ int main(){
   h3=0.25;
   res3 = int_trapeze(f, l, r,(r-l)/h3);
   cout<<"ans = "<<res3<<endl;
+  //уточнение по формуле рунге
   res4=Runge({{res1, h1}, {res2, h2}, {res3, h3}}, 2);
   cout<<"R ans = "<<res4<<endl;
   return 0;
