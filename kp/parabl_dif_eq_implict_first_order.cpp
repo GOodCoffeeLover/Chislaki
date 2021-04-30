@@ -36,6 +36,7 @@ vector<double> progonka(const vector<vector<double>>& mtrix){
   vector<double> P(mtrix.size()+1, 0.0), 
                  Q(mtrix.size()+1, 0.0), 
                  ans(mtrix.size(), 0.0);
+  cout<<"Progonka:"<<endl;
   for(int i=1; i<P.size(); ++i){
     //Pi = -ci/(bi + ai * P(i-1))
     P[i]=-mtrix[i-1][2]/(mtrix[i-1][1] + mtrix[i-1][0]*P[i-1]);
@@ -48,7 +49,9 @@ vector<double> progonka(const vector<vector<double>>& mtrix){
     Q[i] = (mtrix[i-1][3] - mtrix[i-1][0]*Q[i-1])/(mtrix[i-1][1] + mtrix[i-1][0]*P[i-1]);
     //cout<<"Q["<<i+1<<"] = "<<(Q[i])<<endl;
   }
-  
+  for(int i=0; i<Q.size(); ++i)
+    cout<<"P["<<i+1<<"] = "<<setprecision(width-4)<<fixed<<setw(width)<<(P[i])<<", Q["<<i+1<<"] = "<<setprecision(width-4)<<fixed<<setw(width)<<(Q[i])<<endl;
+  cout<<endl;
   //xn = qn
   ans[ans.size()-1] = Q[Q.size()-1];
   for(int i=ans.size()-1; i>0; --i)
@@ -56,11 +59,17 @@ vector<double> progonka(const vector<vector<double>>& mtrix){
     ans[i-1]=Q[i] + P[i]*ans[i];
   return ans;
 }
+
 void implict_grid_method(const equasion& eq, const edge_cond& cl, const edge_cond& cr, const region& rx, const region& rt, f_RtoR cf, vector<vector<double>>& y){
   y.clear();
   y.push_back({});
   int nx = (rx.r - rx.l)/rx.h;
   int nt = (rt.r - rt.l)/rt.h; 
+  cout<<"x_i:\n";
+  for(int j=0; j<=nx; j+=1)
+    cout<<setprecision(width-4)<<fixed<<setw(width)<<rx.l+j*rx.h <<((j!=nx)?",":"\n");
+  cout<<endl;
+
   for(int k=0; k<=nt; k+=1){
     vector<vector<double>> matrix{};
     for(int i=0; i<=nx; i+=1){
@@ -87,10 +96,27 @@ void implict_grid_method(const equasion& eq, const edge_cond& cl, const edge_con
           (2.0*eq.a1 + rx.h*eq.a2)*rt.h/(2*rx.h*rx.h),
           -y[k-1][i] - rt.h*eq.f(rt.l+rt.h*(k), rx.l+rx.h*i)});
     }
-    if(k!=0)
-    y.push_back(progonka(matrix));
-    //y.push_back(vector<double>(nx+1, 0));
-    
+    cout<<"Step "<<k<<endl;
+
+    if(k!=0){
+      cout<<"Matrix:"<<endl;
+      cout<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
+      cout<<setw(width)<<'a'<<'|'<<setw(width)<<'b'<<'|'<<setw(width)<<'c'<<'|'<<setw(width)<<'d'<<'|'<<endl;
+      cout<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
+      for(auto l: matrix){
+        for(auto d: l)
+          cout<<setprecision(width-4)<<fixed<<setw(width)<<d<<'|';
+        cout<<endl;
+      }
+      cout<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
+      y.push_back(progonka(matrix));
+    }
+    cout<<endl;
+    cout<<"t_"<<k<<" = "<<rt.l+k*rt.h<<endl;
+    cout<<"y_"<<k<<':'<<endl;    
+    for(int j=0; j<=nx; j+=1)
+      cout<<setprecision(width-4)<<fixed<<setw(width)<<y.back()[j] <<((j!=nx)?",":"\n");
+    cout<<endl;
   }
 }
 
@@ -111,21 +137,13 @@ int main(){
   //           cr{0, 1, [](double t){return 0;}};
   // f_RtoR cf = [](double x){return sin( x );};
   
-  vector<vector<double>> y{};
+  vector<vector<double>> y;
   
   implict_grid_method(eq, cl, cr, x,t, cf, y);
 
-   
-  //cout<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
-  // for(auto l : y){
-  //  for(auto d: l)
-  //    cout<<setw(width)<<d<<'|';
-  //   cout<<endl;
-  // }
+  cout<<"Res for T_end = "<<t.r<<" :"<<endl;
   for(int i=0; i<=int((x.r-x.l)/x.h); i+=1)
-    cout<<"( "<<x.l+i*x.h<<", "<<y.back()[i] <<((i!=int((x.r-x.l)/x.h))?"),":")\n");
-  //cout<<endl;
-  //cout<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
+    cout<<"("<<setprecision(width-4)<<fixed<<setw(width)<<x.l+i*x.h<<","<<setprecision(width-4)<<fixed<<setw(width)<<y.back()[i] <<((i!=int((x.r-x.l)/x.h))?"), ":")\n");
   
   return 0;
 }
