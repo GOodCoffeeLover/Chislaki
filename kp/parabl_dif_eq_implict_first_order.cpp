@@ -124,11 +124,11 @@ void implict_grid_method(const equasion& eq, const edge_cond& cl, const edge_con
 int main(){
   //начальные условия
   equasion eq{2.4, 0, 6.3, [](double t, double x){return (x+3)/(t+5);}};
-  region x{-4, 0, 0.8}, 
+  region x{4, 8, 0.8}, 
          t{0, 0.1, 0.025};
   edge_cond cl{5, 4, [](double t){return 78.83185307 + t/(-4.0);}},
             cr{4, 0, [](double t){return 50.26548246 + t*t/(-3.0) - 0.8*t;}};
-  f_RtoR cf = [](double x){return 4.0 + 8.0 * sin( 1.57079633 * x );};
+  f_RtoR cf = [](double x){return 4.0 + 8.0 * sin( M_PI/2 * x );};
   
   //условия примера из методички, решением которого является y = exp(-t)*sin(x)
   // equasion eq{1, 0, 0, [](double t, double x){return 0;}};
@@ -140,6 +140,12 @@ int main(){
   vector<vector<double>> y;
   
   implict_grid_method(eq, cl, cr, x,t, cf, y);
+  for(auto l: y){
+  	for(auto d: l)
+  		cout<<d<<' ';
+  	cout<<endl;
+  }
+
 
   cout<<"Res for T_end = "<<t.r<<" :"<<endl;
   for(int i=0; i<=int((x.r-x.l)/x.h); i+=1)
@@ -147,3 +153,8 @@ int main(){
   
   return 0;
 }
+//
+//скрин методички
+//расчёты подробные:
+//подробные решения(формулы)
+//ответы

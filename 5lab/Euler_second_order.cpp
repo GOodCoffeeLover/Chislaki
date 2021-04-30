@@ -14,7 +14,7 @@ vector<pair<double, double>> euler(auto f, double l, double r, double y0, double
   vector<pair<double, double>> res(n+1, {0,0});
   vector<double> z(n+1, 0);
   double h=(r-l)/n;
-  задание начальной точки
+  //задание начальной точки
   res[0]={l, y0};
   z[0]=z0;
   //вычисление следующих точек по формуле 
