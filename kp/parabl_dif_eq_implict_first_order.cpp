@@ -109,9 +109,9 @@ void implict_grid_method(const equasion& eq, const edge_cond& cl, const edge_con
         cout<<endl;
       }
       cout<<line<<'+'<<line<<'+'<<line<<'+'<<line<<'+'<<endl;
+      cout<<endl;
       y.push_back(progonka(matrix));
     }
-    cout<<endl;
     cout<<"t_"<<k<<" = "<<rt.l+k*rt.h<<endl;
     cout<<"y_"<<k<<':'<<endl;    
     for(int j=0; j<=nx; j+=1)
