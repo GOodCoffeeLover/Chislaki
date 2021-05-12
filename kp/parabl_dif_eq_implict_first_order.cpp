@@ -140,6 +140,7 @@ int main(){
   vector<vector<double>> y;
   
   implict_grid_method(eq, cl, cr, x,t, cf, y);
+  cout<<"Table of results"<<endl;
   for(auto l: y){
   	for(auto d: l)
   		cout<<d<<' ';
