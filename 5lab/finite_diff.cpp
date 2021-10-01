@@ -77,12 +77,12 @@ vector<pair<double, double>> Finite_diff(auto F, auto K, auto L, auto M, pair<do
 
 int main(){
   //начальные условия
-  // auto F = [](double x){return -5*x*x -5*x -1;};
-  // auto K = [](double x){return 2;};
-  // auto L = [](double x){return -1;};
-  // auto M = [](double x){return -4;};
-  // double l=1.0, r=2.0, y0=3.0, yn = 5.0, h =0.20;
-  // condintion c0{0, 5, y0}, cn{0, 5, yn};
+  auto F = [](double x){return -5*x*x -5*x -1;};
+  auto K = [](double x){return 2;};
+  auto L = [](double x){return -1;};
+  auto M = [](double x){return -4;};
+  double l=1.0, r=2.0, y0=3.0, yn = 5.0, h =0.20;
+  condintion c0{0, 5, y0}, cn{0, 5, yn};
   
   // auto F = [](double x){return -4*x*x +1*x -2;};
   // auto K = [](double x){return 2;};
@@ -91,12 +91,12 @@ int main(){
   // double l=-1.0, r=0.0, y0=4.0, yn = 1.0, h =0.20;
   // condintion c0{2, 4, y0}, cn{-3, 3, yn};
   
-  auto F = [](double x){return 2.0*sqrt(x);};
-  auto K = [](double x){return 2*x*x;};
-  auto L = [](double x){return x;};
-  auto M = [](double x){return 1;};
-  double l=1.0, r=10.0, y0=2.0, yn = 2.0*sqrt(10), h =9.0/4.0;
-  condintion c0{0, 1, y0}, cn{0, 1, yn};
+  // auto F = [](double x){return 2.0*sqrt(x);};
+  // auto K = [](double x){return 2*x*x;};
+  // auto L = [](double x){return x;};
+  // auto M = [](double x){return 1;};
+  // double l=1.0, r=10.0, y0=2.0, yn = 2.0*sqrt(10), h =9.0/4.0;
+  // condintion c0{0, 1, y0}, cn{0, 1, yn};
 
 
   cout<<setprecision(width-6)<<fixed;       //количество знаков после запятой
